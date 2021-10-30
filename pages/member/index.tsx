@@ -4,7 +4,7 @@ import OverviewContent from "../../components/organisms/OverviewContent";
 export default function Member() {
     return (
         <section className="overview overflow-auto">
-            <SideBar />
+            <SideBar activeMenu="overview" />
             <OverviewContent />
         </section>
     )
