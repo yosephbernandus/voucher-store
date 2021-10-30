@@ -19,7 +19,7 @@ export default function EditProfile() {
                                     </div>
                                 </div>
                                 <div className="image-upload">
-                                    <label for="avatar">
+                                    <label htmlFor="avatar">
                                         <img src="/icon/upload.svg" alt="Icon Upload" width="90" height="90" />
                                     </label>
                                     <input id="avatar" type="file" name="avatar" accept="image/png, image/jpeg" />
