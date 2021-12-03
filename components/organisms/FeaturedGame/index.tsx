@@ -1,13 +1,19 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import GameItem from "../../molecules/GameItem";
-import axios from 'axios';
+import { getFeaturedGame } from "../../../services/player";
 
 export default function FeaturedGame() {
     const [gameList, setGameList] = useState([]);
-    useEffect(async () => {
-        const response = await axios.get('https://voucher-store.herokuapp.com/api/v1/players/landing-page')
-        setGameList(response.data.data)
+
+    const getFeatureGameList = useCallback(async () => {
+        const data = await getFeaturedGame();
+        setGameList(data);
+    }, [getFeaturedGame]);
+
+    useEffect(() => {
+        getFeatureGameList()
     }, [])
+
     return (
         <section className="featured-game pt-50 pb-50">
             <div className="container-fluid">
