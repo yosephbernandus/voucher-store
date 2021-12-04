@@ -15,7 +15,7 @@ export default function FeaturedGame() {
         getFeatureGameList()
     }, [])
 
-    const API_IMG = process.env.NEXT_PUBLIC_MG;
+    const API_IMG = process.env.NEXT_PUBLIC_IMG;
     return (
         <section className="featured-game pt-50 pb-50">
             <div className="container-fluid">
