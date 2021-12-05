@@ -1,8 +1,31 @@
 import NominalItem from "./NominalItem";
 import PaymentItem from "./PaymentItem";
 
+interface NominalsProps {
+    _id: string;
+    coinName: string;
+    price: number;
+    coinQuantity: number;
+}
 
-export default function TopUpForm(props) {
+interface BankProps {
+    _id: string;
+    bankName: string;
+}
+
+interface PaymentProps {
+    bank: BankProps;
+    type: string;
+}
+
+interface TopUpFormProps {
+    nominals: NominalsProps;
+    payments: PaymentProps;
+}
+
+
+
+export default function TopUpForm(props: TopUpFormProps) {
     const { nominals, payments } = props;
     return (
         <form action="./checkout.html" method="POST">
