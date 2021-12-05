@@ -1,28 +1,11 @@
+import { NominalTypes, PaymentTypes } from "../../../services/data-types";
 import NominalItem from "./NominalItem";
 import PaymentItem from "./PaymentItem";
 
-interface NominalsProps {
-    _id: string;
-    coinName: string;
-    price: number;
-    coinQuantity: number;
-}
-
-interface BankProps {
-    _id: string;
-    bankName: string;
-}
-
-interface PaymentProps {
-    bank: BankProps;
-    type: string;
-}
-
 interface TopUpFormProps {
-    nominals: NominalsProps;
-    payments: PaymentProps;
+    nominals: NominalTypes[];
+    payments: PaymentTypes[];
 }
-
 
 
 export default function TopUpForm(props: TopUpFormProps) {
@@ -41,7 +24,7 @@ export default function TopUpForm(props: TopUpFormProps) {
                 <div className="row justify-content-between">
                     {nominals.map((nominal) => (
                         <NominalItem
-                            key={nominal.id}
+                            key={nominal._id}
                             _id={nominal._id}
                             coinQuantity={nominal.coinQuantity}
                             coinName={nominal.coinName}
