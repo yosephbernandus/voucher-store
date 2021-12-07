@@ -1,11 +1,11 @@
 import axios from "axios";
-import { LoginTypes } from "./data-types";
+import { LoginTypes, RegisterTypes } from "./data-types";
 
 const ROOT_API = process.env.NEXT_PUBLIC_API;
 const API_VERSION = 'api/v1';
 
 
-export async function setSignUp(data) {
+export async function setSignUp(data: RegisterTypes) {
     const URL = 'auth/signup';
 
     const response = await axios.post(`${ROOT_API}/${API_VERSION}/${URL}`, data).catch(err => err.response);
