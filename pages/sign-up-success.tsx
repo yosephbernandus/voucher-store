@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function SignUpSuccess() {
     return (
         <section className="sign-up-success mx-auto pt-md-179 pb-md-179 pt-150 pb-100">
@@ -108,13 +110,17 @@ export default function SignUpSuccess() {
                 <div className="pt-70 pb-md-50 pb-150">
                     <h2 className="text-4xl fw-bold text-center color-palette-1 mb-10">Well Done!</h2>
                     <p className="text-lg text-center color-palette-1 m-0">Kamu sudah bisa melakukan top up<br
-                            className="d-sm-block d-none" />
+                        className="d-sm-block d-none" />
                         dan menjadi pemenang!</p>
                 </div>
                 <div className="button-group d-flex flex-column mx-auto">
-                    <a className="btn btn-top-up fw-medium text-lg text-white rounded-pill" href="../index.html"
-                        role="button">Top
-                        Up</a>
+                    <Link href="/sign-in">
+                        <a className="btn btn-top-up fw-medium text-lg text-white rounded-pill"
+                            role="button"
+                        >
+                            Top Up
+                        </a>
+                    </Link>
                 </div>
             </div>
         </section>
