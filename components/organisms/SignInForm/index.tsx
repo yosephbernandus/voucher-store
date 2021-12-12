@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -24,7 +25,10 @@ export default function SignInForm() {
                 toast.error(response.message)
             } else {
                 toast.success('Login Berhasil');
-                router.push('/');
+                const { token } = response.data;
+                const tokenBase64 = btoa(token);
+                Cookies.set("token", tokenBase64, { expires: 1 });
+                // router.push('/');
             }
         }
     }
