@@ -14,9 +14,18 @@ export default function OverviewContent() {
         } else {
             setCount(response.data.count);
             setData(response.data.data);
+            console.log(response.data.data);
         }
     }, []);
     const IMG = process.env.NEXT_PUBLIC_IMG;
+
+    function getIcon(icon: string) {
+        if (icon == "Mobile") {
+            return 'ic-mobile';
+        } else {
+            return 'ic-desktop';
+        }
+    }
     return (
         <main className="main-wrapper">
             <div className="ps-lg-0">
@@ -26,7 +35,7 @@ export default function OverviewContent() {
                     <div className="main-content">
                         <div className="row">
                             {count.map((item) => (
-                                <Category nominal={item.value} icon="ic-desktop">{item.name}</Category>
+                                <Category nominal={item.value} icon={getIcon(item.name)}>{item.name}</Category>
                             ))}
                         </div>
                     </div>
