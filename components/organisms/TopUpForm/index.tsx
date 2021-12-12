@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NominalTypes, PaymentTypes } from "../../../services/data-types";
 import NominalItem from "./NominalItem";
 import PaymentItem from "./PaymentItem";
@@ -9,14 +10,26 @@ interface TopUpFormProps {
 
 
 export default function TopUpForm(props: TopUpFormProps) {
+    const [verifyID, setVerifyID] = useState('');
     const { nominals, payments } = props;
+    const onNominalItemChange = (data: NominalTypes) => {
+        localStorage.setItem('nominal-item', JSON.stringify(data));
+    }
     return (
         <form action="./checkout.html" method="POST">
             <div className="pt-md-50 pt-30">
                 <div className="">
                     <label htmlFor="ID" className="form-label text-lg fw-medium color-palette-1 mb-10">Verify ID</label>
-                    <input type="text" className="form-control rounded-pill text-lg" id="ID" name="ID"
-                        aria-describedby="verifyID" placeholder="Enter your ID" />
+                    <input
+                        type="text"
+                        className="form-control rounded-pill text-lg"
+                        id="ID"
+                        name="ID"
+                        aria-describedby="verifyID"
+                        placeholder="Enter your ID"
+                        value={verifyID}
+                        onChange={(event) => setVerifyID(event.target.value)}
+                    />
                 </div>
             </div>
             <div className="pt-md-50 pb-md-50 pt-30 pb-20">
@@ -29,6 +42,7 @@ export default function TopUpForm(props: TopUpFormProps) {
                             coinQuantity={nominal.coinQuantity}
                             coinName={nominal.coinName}
                             price={nominal.price}
+                            onChange={() => onNominalItemChange(nominal)}
                         />
                     ))}
                     <div className="col-lg-4 col-sm-6">
