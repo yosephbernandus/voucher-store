@@ -2,7 +2,7 @@ import Link from "next/link";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { setLogin } from "../../../services/auth";
 
@@ -72,7 +72,6 @@ export default function SignInForm() {
                     </a>
                 </Link>
             </div>
-            <ToastContainer />
         </>
     )
 }
