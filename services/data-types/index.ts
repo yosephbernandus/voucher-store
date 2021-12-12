@@ -46,3 +46,16 @@ export interface RegisterTypes {
     email: string;
     password: string;
 }
+
+export interface UserTypes {
+    id: string;
+    avatar: string;
+    email: string;
+    name: string;
+    username: string;
+}
+
+export interface JWTPayloadTypes {
+    player: UserTypes;
+    iat: number;
+}
