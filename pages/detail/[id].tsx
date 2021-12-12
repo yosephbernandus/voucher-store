@@ -5,6 +5,8 @@ import Footer from "../../components/organisms/Footer";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { getDetailVoucher } from "../../services/player";
+import { JWTPayloadTypes, UserTypes } from "../../services/data-types";
+import jwtDecode from "jwt-decode";
 
 export default function Detail() {
     const { query, isReady } = useRouter();
@@ -56,4 +58,37 @@ export default function Detail() {
             <Footer />
         </>
     )
+}
+
+
+interface GetServerSideProps {
+    req: {
+        cookies: {
+            token: string;
+        }
+    }
+}
+
+
+export async function getServerSideProps({ req }: GetServerSideProps) {
+    const { token } = req.cookies
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/sign-in',
+                permanent: false,
+            },
+        };
+    }
+
+    const jwtToken = Buffer.from(token, 'base64').toString('ascii');
+    const payload: JWTPayloadTypes = jwtDecode(jwtToken);
+    const userFromPayload: UserTypes = payload.player;
+    const IMG = process.env.NEXT_PUBLIC_IMG;
+    userFromPayload.avatar = `${IMG}/${userFromPayload.avatar}`;
+    return {
+        props: {
+            user: userFromPayload
+        },
+    }
 }
