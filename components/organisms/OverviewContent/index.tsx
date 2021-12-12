@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getMemberOverview } from "../../../services/player";
 import Category from "./Category";
 import TableRow from "./TableRow";
 import { toast } from "react-toastify";
+import { HistoryTransactionTypes, TopUpCategoriesTypes } from "../../../services/data-types";
 
 export default function OverviewContent() {
     const [count, setCount] = useState([]);
     const [data, setData] = useState([]);
-    useEffect(async () => {
+
+    const getMemberOverviewAPI = useCallback(async () => {
         const response = await getMemberOverview();
         if (response.error == true) {
             toast.error(response.message)
@@ -17,8 +19,12 @@ export default function OverviewContent() {
             console.log(response.data.data);
         }
     }, []);
-    const IMG = process.env.NEXT_PUBLIC_IMG;
 
+    useEffect(() => {
+        getMemberOverviewAPI()
+    }, []);
+
+    const IMG = process.env.NEXT_PUBLIC_IMG;
     function getIcon(icon: string) {
         if (icon == "Mobile") {
             return 'ic-mobile';
@@ -34,8 +40,8 @@ export default function OverviewContent() {
                     <p className="text-lg fw-medium color-palette-1 mb-14">Top Up Categories</p>
                     <div className="main-content">
                         <div className="row">
-                            {count.map((item) => (
-                                <Category nominal={item.value} icon={getIcon(item.name)}>{item.name}</Category>
+                            {count.map((item: TopUpCategoriesTypes) => (
+                                <Category key={item._id} nominal={item.value} icon={getIcon(item.name)}>{item.name}</Category>
                             ))}
                         </div>
                     </div>
@@ -53,8 +59,9 @@ export default function OverviewContent() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map((item) => (
+                                {data.map((item: HistoryTransactionTypes) => (
                                     <TableRow
+                                        key={item._id}
                                         title={item.historyVoucherTopup.gameName}
                                         category={item.historyVoucherTopup.category}
                                         item={`${item.historyVoucherTopup.coinQuantity} ${item.historyVoucherTopup.coinName}`}
