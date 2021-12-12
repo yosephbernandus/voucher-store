@@ -16,8 +16,8 @@ export default function Auth() {
     useEffect(() => {
         const token = Cookies.get("token");
         if (token) {
-            const jwt_token = atob(token);
-            const payload: JWTPayloadTypes = jwtDecode(jwt_token);
+            const jwtToken = atob(token);
+            const payload: JWTPayloadTypes = jwtDecode(jwtToken);
             const userFromPayload: UserTypes = payload.player;
             const IMG = process.env.NEXT_PUBLIC_IMG;
             user.avatar = `${IMG}/${userFromPayload.avatar}`;
