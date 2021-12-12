@@ -37,7 +37,7 @@ export default async function callAPI({url, method, data, token}: CallAPIProps) 
     const res = {
         error: false,
         message: 'success',
-        data: response.data.data
+        data: response.data.count ? response.data : response.data.data
     }
 
     return res;
