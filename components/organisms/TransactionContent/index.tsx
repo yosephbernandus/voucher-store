@@ -8,8 +8,9 @@ import NumberFormat from 'react-number-format';
 export default function TransactionContent() {
     const [transactions, setTransactions] = useState([]);
     const [total, setTotal] = useState(0);
-    const getMemberTransactionAPI = useCallback(async () => {
-        const response = await getMemberTransactions();
+    const [tab, setTab] = useState('all');
+    const getMemberTransactionAPI = useCallback(async (value) => {
+        const response = await getMemberTransactions(value);
         if (response.error) {
             toast.error(response.message);
         } else {
@@ -20,8 +21,13 @@ export default function TransactionContent() {
 
 
     useEffect(() => {
-        getMemberTransactionAPI();
+        getMemberTransactionAPI('all');
     }, []);
+
+    const onTabClick = (value) => {
+        setTab(value);
+        getMemberTransactionAPI(value)
+    }
 
     const IMG = process.env.NEXT_PUBLIC_IMG;
     return (
@@ -43,10 +49,10 @@ export default function TransactionContent() {
                 <div className="row mt-30 mb-20">
                     <div className="col-lg-12 col-12 main-content">
                         <div id="list_status_title">
-                            <ButtonTab title="All Trx" active />
-                            <ButtonTab title="Success" active={false} />
-                            <ButtonTab title="Pending" active={false} />
-                            <ButtonTab title="Failed" active={false} />
+                            <ButtonTab onClick={() => onTabClick('all')} title="All Trx" active={tab === 'all'} />
+                            <ButtonTab onClick={() => onTabClick('success')} title="Success" active={tab === 'success'} />
+                            <ButtonTab onClick={() => onTabClick('pending')} title="Pending" active={tab === 'pending'} />
+                            <ButtonTab onClick={() => onTabClick('failed')} title="Failed" active={tab === 'failed'} />
                         </div>
                     </div>
                 </div>

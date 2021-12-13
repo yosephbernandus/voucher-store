@@ -14,8 +14,14 @@ export async function getMemberOverview() {
 }
 
 
-export async function getMemberTransactions() {
-    const url = `${ROOT_API}/${API_VERSION}/players/history`;
+export async function getMemberTransactions(valueParams) {
+    let params = ''
+    if(valueParams === 'all') {
+        params = ''
+    } else {
+        params = `?status=${valueParams}`
+    }
+    const url = `${ROOT_API}/${API_VERSION}/players/history${params}`;
 
     return callAPI({
         url,
