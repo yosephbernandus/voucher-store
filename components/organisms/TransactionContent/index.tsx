@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { getMemberTransactions } from "../../../services/member";
 import { toast } from "react-toastify";
 import NumberFormat from 'react-number-format';
+import { HistoryTransactionTypes } from "../../../services/data-types";
 
 export default function TransactionContent() {
     const [transactions, setTransactions] = useState([]);
@@ -24,7 +25,7 @@ export default function TransactionContent() {
         getMemberTransactionAPI('all');
     }, []);
 
-    const onTabClick = (value) => {
+    const onTabClick = (value: string) => {
         setTab(value);
         getMemberTransactionAPI(value)
     }
@@ -70,7 +71,7 @@ export default function TransactionContent() {
                                 </tr>
                             </thead>
                             <tbody id="list_status_item">
-                                {transactions.map((transaction) => (
+                                {transactions.map((transaction: HistoryTransactionTypes) => (
                                     <TableRow
                                         key={transaction._id}
                                         title={transaction.historyVoucherTopup.gameName}
@@ -79,6 +80,7 @@ export default function TransactionContent() {
                                         price={transaction.value}
                                         status={transaction.status}
                                         image={`${IMG}/${transaction.historyVoucherTopup.thumbnail}`}
+                                        id={transaction._id}
                                     />
                                 ))}
                             </tbody>
