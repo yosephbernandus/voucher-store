@@ -6,20 +6,24 @@ import { toast } from "react-toastify";
 import NumberFormat from 'react-number-format';
 
 export default function TransactionContent() {
-    const [data, setData] = useState([]);
+    const [transactions, setTransactions] = useState([]);
     const [total, setTotal] = useState(0);
     const getMemberTransactionAPI = useCallback(async () => {
         const response = await getMemberTransactions();
         if (response.error) {
-            toast.error(response.message)
+            toast.error(response.message);
         } else {
-            setData(response.data.data);
+            setTransactions(response.data.data);
             setTotal(response.data.total);
         }
-    }, [])
+    }, []);
+
+
     useEffect(() => {
         getMemberTransactionAPI();
-    }, [])
+    }, []);
+
+    const IMG = process.env.NEXT_PUBLIC_IMG;
     return (
         <main className="main-wrapper">
             <div className="ps-lg-0">
@@ -60,10 +64,17 @@ export default function TransactionContent() {
                                 </tr>
                             </thead>
                             <tbody id="list_status_item">
-                                <TableRow title="Mobile Legends: The New Battle 2021" category="Mobile" item={200} price={290000} status="Pending" image="overview-1" />
-                                <TableRow title="Call of Duty: Modern" category="Desktop" item={550} price={740000} status="Success" image="overview-2" />
-                                <TableRow title="Clash of  Clans" category="Mobile" item={100} price={120000} status="Failed" image="overview-3" />
-                                <TableRow title="The Royal Game" category="Mobile" item={225} price={200000} status="Pending" image="overview-4" />
+                                {transactions.map((transaction) => (
+                                    <TableRow
+                                        key={transaction._id}
+                                        title={transaction.historyVoucherTopup.gameName}
+                                        category={transaction.historyVoucherTopup.category}
+                                        item={`${transaction.historyVoucherTopup.coinQuantity} ${transaction.historyVoucherTopup.coinName}`}
+                                        price={transaction.value}
+                                        status={transaction.status}
+                                        image={`${IMG}/${transaction.historyVoucherTopup.thumbnail}`}
+                                    />
+                                ))}
                             </tbody>
                         </table>
                     </div>
