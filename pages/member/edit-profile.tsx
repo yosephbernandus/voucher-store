@@ -7,6 +7,7 @@ import { JWTPayloadTypes, UserTypes } from "../../services/data-types";
 
 export default function EditProfile() {
 
+    const [imagePreview, setImagePreview] = useState(null);
     const [user, setUser] = useState({
         name: '',
         email: '',
@@ -23,6 +24,10 @@ export default function EditProfile() {
     }, []);
     const IMG = process.env.NEXT_PUBLIC_IMG;
 
+    const onSubmit = () => {
+        console.log(user)
+    }
+
     return (
         <section className="edit-profile overflow-auto">
             <SideBar activeMenu="settings" />
@@ -34,13 +39,33 @@ export default function EditProfile() {
                             <div className="photo d-flex">
                                 <div className="image-upload">
                                     <label htmlFor="avatar">
-                                        <img src={`${IMG}/${user.avatar}`} className="rounded-circle" alt="Icon Upload" width="90" height="90" style={{ borderRadius: '100%' }} />
+                                        {imagePreview ? (
+                                            <img src={imagePreview} className="rounded-circle" alt="Icon Upload" width="90" height="90" style={{ borderRadius: '100%' }} />
+                                        ) : (
+                                            <img src={`${IMG}/${user.avatar}`} className="rounded-circle" alt="Icon Upload" width="90" height="90" style={{ borderRadius: '100%' }} />
+                                        )}
                                     </label>
-                                    <input id="avatar" type="file" name="avatar" accept="image/png, image/jpeg" />
+                                    <input
+                                        id="avatar"
+                                        type="file"
+                                        name="avatar"
+                                        accept="image/png, image/jpeg"
+                                        onChange={(event) => {
+                                            const img = event.target.files[0];
+                                            setImagePreview(URL.createObjectURL(img))
+                                            return setUser({
+                                                ...user,
+                                                avatar: img
+                                            });
+                                        }}
+                                    />
                                 </div>
                             </div>
                             <div className="pt-30">
-                                <Input label="Full Name" value={user.name} />
+                                <Input label="Full Name" value={user.name} onChange={(event) => setUser({
+                                    ...user,
+                                    name: event.target.value
+                                })} />
                             </div>
                             <div className="pt-30">
                                 <Input label="Email Address" disabled value={user.email} />
@@ -49,8 +74,13 @@ export default function EditProfile() {
                                 <Input label="Phone" />
                             </div> */}
                             <div className="button-group d-flex flex-column pt-50">
-                                <button type="submit" className="btn btn-save fw-medium text-lg text-white rounded-pill"
-                                    role="button">Save My Profile</button>
+                                <button
+                                    type="button"
+                                    className="btn btn-save fw-medium text-lg text-white rounded-pill"
+                                    onClick={onSubmit}
+                                >
+                                    Save My Profile
+                                </button>
                             </div>
                         </form>
 
