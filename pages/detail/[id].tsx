@@ -16,6 +16,9 @@ interface DetailProps {
 
 export default function Detail({ dataItem, nominals, payments }: DetailProps) {
 
+    useEffect(() => {
+        localStorage.setItem('data-item', JSON.stringify(dataItem));
+    }, []);
     // DIsable using get static props & get static paths
 
     // const { query, isReady } = useRouter();
