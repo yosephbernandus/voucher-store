@@ -4,36 +4,45 @@ import Navbar from "../../components/organisms/Navbar";
 import Footer from "../../components/organisms/Footer";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import { getDetailVoucher } from "../../services/player";
-import { JWTPayloadTypes, UserTypes } from "../../services/data-types";
+import { getDetailVoucher, getFeaturedGame } from "../../services/player";
+import { GameItemTypes, JWTPayloadTypes, NominalTypes, PaymentTypes, UserTypes } from "../../services/data-types";
 import jwtDecode from "jwt-decode";
 
-export default function Detail() {
-    const { query, isReady } = useRouter();
-    const [dataItem, setDataItem] = useState({
-        name: '',
-        thumbnail: '',
-        category: {
-            name: '',
-        }
-    });
+interface DetailProps {
+    dataItem: GameItemTypes;
+    nominals: NominalTypes[];
+    payments: PaymentTypes[];
+}
 
-    const [nominals, setNominals] = useState([]);
-    const [payments, setPayments] = useState([]);
+export default function Detail({ dataItem, nominals, payments }: DetailProps) {
 
-    const getVoucherDetailAPI = useCallback(async (id) => {
-        const data = await getDetailVoucher(id);
-        setDataItem(data.detail);
-        localStorage.setItem('data-item', JSON.stringify(data.detail));
-        setNominals(data.detail.nominals);
-        setPayments(data.payment);
-    }, []);
+    // DIsable using get static props & get static paths
 
-    useEffect(() => {
-        if (isReady) {
-            getVoucherDetailAPI(query.id);
-        }
-    }, [isReady])
+    // const { query, isReady } = useRouter();
+    // const [dataItem, setDataItem] = useState({
+    //     name: '',
+    //     thumbnail: '',
+    //     category: {
+    //         name: '',
+    //     }
+    // });
+
+    // const [nominals, setNominals] = useState([]);
+    // const [payments, setPayments] = useState([]);
+
+    // const getVoucherDetailAPI = useCallback(async (id) => {
+    //     const data = await getDetailVoucher(id);
+    //     setDataItem(data.detail);
+    //     localStorage.setItem('data-item', JSON.stringify(data.detail));
+    //     setNominals(data.detail.nominals);
+    //     setPayments(data.payment);
+    // }, []);
+
+    // useEffect(() => {
+    //     if (isReady) {
+    //         getVoucherDetailAPI(query.id);
+    //     }
+    // }, [isReady])
     return (
         <>
             <Navbar />
@@ -61,34 +70,70 @@ export default function Detail() {
 }
 
 
-interface GetServerSideProps {
-    req: {
-        cookies: {
-            token: string;
+export async function getStaticPaths() {
+    const data = await getFeaturedGame();
+    const paths = data.map((item: GameItemTypes) => ({
+        params: {
+            id: item._id
+        }
+    }));
+
+    console.log(paths)
+    return {
+        paths,
+        fallback: false
+    }
+}
+
+interface GetStaticProps {
+    params: {
+        id: string;
+    }
+}
+
+export async function getStaticProps({ params }: GetStaticProps) {
+    const { id } = params;
+    const data = await getDetailVoucher(id);
+    console.log(data)
+
+    return {
+        props: {
+            dataItem: data.detail,
+            nominals: data.detail.nominals,
+            payments: data.payment,
         }
     }
 }
 
 
-export async function getServerSideProps({ req }: GetServerSideProps) {
-    const { token } = req.cookies
-    if (!token) {
-        return {
-            redirect: {
-                destination: '/sign-in',
-                permanent: false,
-            },
-        };
-    }
+// interface GetServerSideProps {
+//     req: {
+//         cookies: {
+//             token: string;
+//         }
+//     }
+// }
 
-    const jwtToken = Buffer.from(token, 'base64').toString('ascii');
-    const payload: JWTPayloadTypes = jwtDecode(jwtToken);
-    const userFromPayload: UserTypes = payload.player;
-    const IMG = process.env.NEXT_PUBLIC_IMG;
-    userFromPayload.avatar = `${IMG}/${userFromPayload.avatar}`;
-    return {
-        props: {
-            user: userFromPayload
-        },
-    }
-}
+
+// export async function getServerSideProps({ req }: GetServerSideProps) {
+//     const { token } = req.cookies
+//     if (!token) {
+//         return {
+//             redirect: {
+//                 destination: '/sign-in',
+//                 permanent: false,
+//             },
+//         };
+//     }
+
+//     const jwtToken = Buffer.from(token, 'base64').toString('ascii');
+//     const payload: JWTPayloadTypes = jwtDecode(jwtToken);
+//     const userFromPayload: UserTypes = payload.player;
+//     const IMG = process.env.NEXT_PUBLIC_IMG;
+//     userFromPayload.avatar = `${IMG}/${userFromPayload.avatar}`;
+//     return {
+//         props: {
+//             user: userFromPayload
+//         },
+//     }
+// }
