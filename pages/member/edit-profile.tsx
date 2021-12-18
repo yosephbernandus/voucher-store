@@ -8,11 +8,18 @@ import { JWTPayloadTypes, UserTypes } from "../../services/data-types";
 import { updateProfile } from "../../services/member";
 import { toast } from "react-toastify";
 
+interface UserStateTypes {
+    id: string;
+    name: string;
+    email: string;
+    avatar: any;
+}
+
 export default function EditProfile() {
 
     const router = useRouter();
-    const [imagePreview, setImagePreview] = useState(null);
-    const [user, setUser] = useState({
+    const [imagePreview, setImagePreview] = useState('/');
+    const [user, setUser] = useState<UserStateTypes>({
         id: '',
         name: '',
         email: '',
@@ -54,7 +61,7 @@ export default function EditProfile() {
                             <div className="photo d-flex">
                                 <div className="image-upload">
                                     <label htmlFor="avatar">
-                                        {imagePreview ? (
+                                        {imagePreview === '/' ? (
                                             <img src={imagePreview} className="rounded-circle" alt="Icon Upload" width="90" height="90" style={{ borderRadius: '100%' }} />
                                         ) : (
                                             <img src={`${IMG}/${user.avatar}`} className="rounded-circle" alt="Icon Upload" width="90" height="90" style={{ borderRadius: '100%' }} />
@@ -66,7 +73,7 @@ export default function EditProfile() {
                                         name="avatar"
                                         accept="image/png, image/jpeg"
                                         onChange={(event) => {
-                                            const img = event.target.files[0];
+                                            const img = event.target.files![0];
                                             setImagePreview(URL.createObjectURL(img))
                                             return setUser({
                                                 ...user,
