@@ -1,14 +1,19 @@
 import SideBar from "../../components/organisms/SideBar";
 import Input from "../../components/atoms/Input";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 import { JWTPayloadTypes, UserTypes } from "../../services/data-types";
+import { updateProfile } from "../../services/member";
+import { toast } from "react-toastify";
 
 export default function EditProfile() {
 
+    const router = useRouter();
     const [imagePreview, setImagePreview] = useState(null);
     const [user, setUser] = useState({
+        id: '',
         name: '',
         email: '',
         avatar: '',
@@ -24,8 +29,18 @@ export default function EditProfile() {
     }, []);
     const IMG = process.env.NEXT_PUBLIC_IMG;
 
-    const onSubmit = () => {
-        console.log(user)
+    const onSubmit = async () => {
+        const data = new FormData();
+        // Inconsistent name in backend is use image field
+        data.append("image", user.avatar);
+        data.append("name", user.name);
+        const response = await updateProfile(data, user.id);
+        if (response.error) {
+            toast.error(response.message);
+        } else {
+            Cookies.remove('token');
+            router.push('/sign-in');
+        }
     }
 
     return (
