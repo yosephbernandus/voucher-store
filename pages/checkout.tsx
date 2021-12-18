@@ -58,8 +58,6 @@ export async function getServerSideProps({ req }: GetServerSideProps) {
     const IMG = process.env.NEXT_PUBLIC_IMG;
     userFromPayload.avatar = `${IMG}/${userFromPayload.avatar}`;
     return {
-        props: {
-            user: userFromPayload
-        },
+        props: {},
     }
 }

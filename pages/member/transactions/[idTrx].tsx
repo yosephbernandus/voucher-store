@@ -4,12 +4,11 @@ import { HistoryTransactionTypes, JWTPayloadTypes, UserTypes } from "../../../se
 import { getTransactionDetail } from "../../../services/member";
 
 interface TransactionsDetailProps {
-    transaction: HistoryTransactionTypes
+    transactionDetail: HistoryTransactionTypes
 }
 
 export default function TransactionDetail(props: TransactionsDetailProps) {
     const { transactionDetail } = props;
-    console.log(transactionDetail)
     return (
         <section className="transactions-detail overflow-auto">
             <TransactionDetailContent data={transactionDetail} />
